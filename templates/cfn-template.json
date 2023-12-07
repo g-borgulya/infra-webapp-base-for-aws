@@ -288,7 +288,7 @@
   },
   "BackendApiHostname": {
    "Default": "",
-   "Description": "api from api.dev.example.com",
+   "Description": "api from api.dev.wafflecode.app",
    "Type": "String"
   },
   "BuildspecPath": {
@@ -325,7 +325,7 @@
   },
   "FullDomainName": {
    "Default": "",
-   "Description": "like dev.example.com",
+   "Description": "like dev.wafflecode.app",
    "Type": "String"
   },
   "GithubBranch": {
