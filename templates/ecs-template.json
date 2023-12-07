@@ -228,27 +228,27 @@
  "Parameters": {
   "AlertsSnsTopicRef": {
    "Default": "",
-   "Description": "The ref of the sns topic to deliver alarms",
+   "Description": "(optional) The ref of the sns topic to deliver alarms",
    "Type": "String"
   },
   "AuthUserPoolArn": {
    "Default": "",
-   "Description": "The ARN of the user pool",
+   "Description": "(optional) The ARN of the user pool",
    "Type": "String"
   },
   "AuthUserPoolClientWebRef": {
    "Default": "",
-   "Description": "The REF of the user pool web client",
+   "Description": "(optional) The REF of the user pool web client",
    "Type": "String"
   },
   "AuthUserPoolRef": {
    "Default": "",
-   "Description": "The REF of the user pool",
+   "Description": "(optional) The REF of the user pool",
    "Type": "String"
   },
   "BuildEnvVarsJson": {
    "Default": "{}",
-   "Description": "A JSON that will be used as env var during build",
+   "Description": "(optional) A JSON that will be used as env var during build",
    "Type": "String"
   },
   "BuildspecPath": {
@@ -267,7 +267,7 @@
   },
   "CommitID": {
    "Default": "",
-   "Description": "GitHub commit ID of that has to be built",
+   "Description": "(optional) GitHub commit ID of that has to be built",
    "Type": "String"
   },
   "DeploymentId": {
@@ -276,7 +276,7 @@
   },
   "DeploymentSecretArn": {
    "Default": "",
-   "Description": "The arn of the deployment_secret",
+   "Description": "(optional) The arn of the deployment_secret",
    "Type": "String"
   },
   "DeploymentType": {
@@ -285,7 +285,7 @@
   },
   "EcrIncomingConnectionSecurityGroupId": {
    "Default": "",
-   "Description": "Local inbound enabled SG",
+   "Description": "(optional) Local inbound enabled SG",
    "Type": "String"
   },
   "GithubBranch": {
@@ -303,7 +303,7 @@
   },
   "GithubSecretArn": {
    "Default": "",
-   "Description": "The arn of the github_secret",
+   "Description": "(optional) The arn of the github_secret",
    "Type": "String"
   },
   "InstanceCount": {
@@ -313,12 +313,12 @@
   },
   "LocalOutgoingConnectionSecurityGroupId": {
    "Default": "",
-   "Description": "Local outbound enabled SG",
+   "Description": "(optional) Local outbound enabled SG",
    "Type": "String"
   },
   "NatOutgoingConnectionSecurityGroupId": {
    "Default": "",
-   "Description": "NAT outbound enabled SG",
+   "Description": "(optional) NAT outbound enabled SG",
    "Type": "String"
   },
   "PipelineId": {
@@ -327,37 +327,37 @@
   },
   "PrimaryPrivateSubnetRef": {
    "Default": "",
-   "Description": "The primary private subnet in the VPC",
+   "Description": "(optional) The primary private subnet in the VPC",
    "Type": "String"
   },
   "RestApiId": {
    "Default": "",
-   "Description": "The ref of the API Gateway to deploy to",
+   "Description": "(optional) The ref of the API Gateway to deploy to",
    "Type": "String"
   },
   "RootResourceId": {
    "Default": "",
-   "Description": "The ID of the API GW resource to deploy the newresources as children",
+   "Description": "(optional) The ID of the API GW resource to deploy the newresources as children",
    "Type": "String"
   },
   "RuntimeJson": {
    "Default": "{}",
-   "Description": "A JSON that will be passed to the running instance",
+   "Description": "(optional) A JSON that will be passed to the running instance",
    "Type": "String"
   },
   "SecondaryPrivateSubnetRef": {
    "Default": "",
-   "Description": "The secondary private subnet in the VPC",
+   "Description": "(optional) The secondary private subnet in the VPC",
    "Type": "String"
   },
   "VPCCidrBlock": {
    "Default": "",
-   "Description": "The VPC's CIDR block (IP mask)",
+   "Description": "(optional) The VPC's CIDR block (IP mask)",
    "Type": "String"
   },
   "VPCRef": {
    "Default": "",
-   "Description": "The VPC",
+   "Description": "(optional) The VPC",
    "Type": "String"
   }
  },

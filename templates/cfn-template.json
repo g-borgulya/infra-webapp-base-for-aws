@@ -248,47 +248,47 @@
  "Parameters": {
   "AlertsSnsTopicRef": {
    "Default": "",
-   "Description": "The ref of the sns topic to deliver alarms",
+   "Description": "(optional) The ref of the sns topic to deliver alarms",
    "Type": "String"
   },
   "ApiHost": {
    "Default": "",
-   "Description": "Hostname of the Api Gateway",
+   "Description": "(optional) Hostname of the Api Gateway",
    "Type": "String"
   },
   "ApiProtocol": {
    "Default": "",
-   "Description": "https://",
+   "Description": "(optional) https://",
    "Type": "String"
   },
   "ApiStage": {
    "Default": "",
-   "Description": "Api Gateway stage path: /Prod",
+   "Description": "(optional) Api Gateway stage path: /Prod",
    "Type": "String"
   },
   "AuthIdentityPoolRef": {
    "Default": "",
-   "Description": "The REF of the user pool",
+   "Description": "(optional) The REF of the user pool",
    "Type": "String"
   },
   "AuthUserPoolArn": {
    "Default": "",
-   "Description": "The ARN of the user pool",
+   "Description": "(optional) The ARN of the user pool",
    "Type": "String"
   },
   "AuthUserPoolClientWebRef": {
    "Default": "",
-   "Description": "The REF of the user pool web client",
+   "Description": "(optional) The REF of the user pool web client",
    "Type": "String"
   },
   "AuthUserPoolRef": {
    "Default": "",
-   "Description": "The REF of the user pool",
+   "Description": "(optional) The REF of the user pool",
    "Type": "String"
   },
   "BackendApiHostname": {
    "Default": "",
-   "Description": "api from api.dev.wafflecode.app",
+   "Description": "(optional) api from api.dev.example.com",
    "Type": "String"
   },
   "BuildspecPath": {
@@ -307,7 +307,7 @@
   },
   "CommitID": {
    "Default": "",
-   "Description": "GitHub commit ID of that has to be built",
+   "Description": "(optional) GitHub commit ID of that has to be built",
    "Type": "String"
   },
   "DeploymentId": {
@@ -316,7 +316,7 @@
   },
   "DeploymentSecretArn": {
    "Default": "",
-   "Description": "The arn of the deployment_secret",
+   "Description": "(optional) The arn of the deployment_secret",
    "Type": "String"
   },
   "DeploymentType": {
@@ -325,7 +325,7 @@
   },
   "FullDomainName": {
    "Default": "",
-   "Description": "like dev.wafflecode.app",
+   "Description": "(optional) like dev.example.com",
    "Type": "String"
   },
   "GithubBranch": {
@@ -343,17 +343,17 @@
   },
   "GithubSecretArn": {
    "Default": "",
-   "Description": "The arn of the github_secret",
+   "Description": "(optional) The arn of the github_secret",
    "Type": "String"
   },
   "LocalOutgoingConnectionSecurityGroupId": {
    "Default": "",
-   "Description": "Local outbound enabled SG",
+   "Description": "(optional) Local outbound enabled SG",
    "Type": "String"
   },
   "NatOutgoingConnectionSecurityGroupId": {
    "Default": "",
-   "Description": "NAT outbound enabled SG",
+   "Description": "(optional) NAT outbound enabled SG",
    "Type": "String"
   },
   "PipelineId": {
@@ -362,22 +362,22 @@
   },
   "PrimaryPrivateSubnetRef": {
    "Default": "",
-   "Description": "The primary private subnet in the VPC",
+   "Description": "(optional) The primary private subnet in the VPC",
    "Type": "String"
   },
   "RestApiId": {
    "Default": "",
-   "Description": "The ref of the API Gateway to deploy to",
+   "Description": "(optional) The ref of the API Gateway to deploy to",
    "Type": "String"
   },
   "RootResourceId": {
    "Default": "",
-   "Description": "The ID of the API GW resource to deploy the newresources as children",
+   "Description": "(optional) The ID of the API GW resource to deploy the newresources as children",
    "Type": "String"
   },
   "SecondaryPrivateSubnetRef": {
    "Default": "",
-   "Description": "The secondary private subnet in the VPC",
+   "Description": "(optional) The secondary private subnet in the VPC",
    "Type": "String"
   },
   "VPCRef": {

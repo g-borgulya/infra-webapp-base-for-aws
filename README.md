@@ -11,8 +11,8 @@ Steps:
 - Deploy Miscellaneous tools
 - Setup secrets
 - Deploy Databases
-- Deploy backend services as a containers
 - Deploy backend services as serverless
+- Deploy backend services as a containers
 - Deploy frontends
 
 ## Create an AWS account
@@ -343,11 +343,70 @@ The names of the secrets storing the application load balancers' host names are 
 - DeploymentID is the the ID of this deployment in question
 - DatabaseID is the ID of the database stack.
 
+## Deploy backend services as serverless
+
+This template deploys a CICD pipeline that can deploy a complete CloudFormation stack. The primary purpose is to have lambda function(s) defined in the stack template so that the CICD can deploy into AWS Lambda. But if needed other AWS resources can be added too, like CloudWatch Alarms, DBs, Queues, etc. More on the requirements on the deployed repo below.
+
+Go to `AWS Console > CloudFormation` and select `Create stack`. Select that the template is ready, and choose `Upload a template file`. Select `cfn-template.yml` from this repo.
+
+Use the following parameters:
+- Stack name: can be whatever. Recommended to have something that explains that this is a cicd deploying cloudformation and its purpose too (for example: `cicd-cfn-alerts`)
+- BuildspecPath: The path to the `buildspec.yml` file. (like `alerts/buildspec.yml`)
+- CICDManualApproval: If set to True, then there will be a manual step in the CICD process, that requires a human to approve the changes. Intended to be used on production environments.
+- DeploymentId: `dev` (see the Deployment ID section above)
+- DeploymentType: `DEV` (or `PROD`, see the Deployment Type section above)
+- GithubBranch: the branch of the github repo to be deployed
+- GithubOwner: the user or organization that the repository belongs to
+- GithubRepoName: the name of the repository
+- PipelineId: can be whatever. Recommended to use a name that can be used from code to access this service (for example? `alerts`)
+
+The optional parameters can be used to override values coming from the existing stacks.
+
+It's OK to use the default stack option configuration.
+Before submission, acknowledge that the templates are going to create IAM roles.
+
+Expected to take up to 2-3 minutes to deploy.
+
+### CFN repository requirements
+
+There are two required files to be included in a repo that's meant to be deployed as serverless.
+- `cnf-template.yml` - this is a CloudFormation template that's meant to be deployed.
+- `buildspec.yml` - this tells `AWS CodeBuild` what to do with the source files before deployment. In this specific case, it has to prepare a cfn template ready to be deployed with its parameters. 
+
+### Using the CICD pipeline
+
+You can find the CICD pipeline in `AWS Console > CodePipeline > Pipelines >` the name will be something similar to the stack name specified above.
+
+Look for building issues in the related CodeBuild logs.
+
+When the CICD processes the initial repo or a change in the repo successfully, then it creates a new or updated CloudFormation stack. The deployment of this stack can be tracked in `AWS Console > CloudFormation`. The name of the newly generated stack will be `{DeploymentID}-{PipelineID}`.
+
+A deployment can take a longer time, depending on the build complexity and the number and types of AWS resources to be deployed or updated.
 
 ## Deploy backend services as a container
 
+This template deploys a CICD pipeline that can deploy a docker container. After the CICD builds the contaner image, it is stored in the `AWS ECR` container repository. And new containers are deployed by `AWS CodeDeploy` as `AWS ECS Fargate` Clusters > Services > Tasks.
 
+Go to `AWS Console > CloudFormation` and select `Create stack`. Select that the template is ready, and choose `Upload a template file`. Select `ecs-template.yml` from this repo.
 
+Use the following parameters:
+- Stack name: can be whatever. Recommended to have something that explains that this is a cicd deploying cloudformation and its purpose too (for example: `cicd-ecs-engine`)
+- BuildspecPath: The path to the `buildspec.yml` file. (like `engine/buildspec.yml`)
+- CICDManualApproval: If set to True, then there will be a manual step in the CICD process, that requires a human to approve the changes. Intended to be used on production environments.
+- DeploymentId: `dev` (see the Deployment ID section above)
+- DeploymentType: `DEV` (or `PROD`, see the Deployment Type section above)
+- GithubBranch: the branch of the github repo to be deployed
+- GithubOwner: the user or organization that the repository belongs to
+- GithubRepoName: the name of the repository
+- InstanceCount: how many instances should be run in parallel. If you're unsure if your container builds without issues, it's helpful to start with 0, and increase the parameter later.
+- PipelineId: can be whatever. Recommended to use a name that can be used from code to access this service (for example? `engine`)
+
+The optional parameters can be used to override values coming from the existing stacks.
+
+It's OK to use the default stack option configuration.
+Before submission, acknowledge that the templates are going to create IAM roles.
+
+The time required to deploy this stack depends on the number if instances to be deployed, as the deployment waits for the instances to be created. If it's 0 then it's about 2-3 minutes to deploy this stack.
 
 ### Accessing ECS backends from Lambdas
 
@@ -357,8 +416,5 @@ The names of the parameters storing the application load balancers' host names a
 `{DeploymentID}/ecs/{PipelineID}/albDnsName`, where:
 - DeploymentID is the the ID of this deployment in question
 - PipelineID is the ID of the CICD stack that deploys to ECS Fargate.
-
-
-## Deploy backend services as serverless
 
 ## Deploy frontends
