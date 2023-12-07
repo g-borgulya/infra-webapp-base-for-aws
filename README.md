@@ -10,11 +10,10 @@ Steps:
 - Deploy the API Gateway
 - Deploy Miscellaneous tools
 - Setup secrets
-- Deploy Slack noticifications
-- Deploy a Postgres DB
-- Deploy a backend service as a container
-- Deploy a backend service as serverless
-- Deploy a frontend
+- Deploy Databases
+- Deploy backend services as a containers
+- Deploy backend services as serverless
+- Deploy frontends
 
 ## Create an AWS account
 
@@ -218,6 +217,8 @@ Two different types of deployments are supported:
 - `PROD` adds more monitoring features
 - `DEV` is cheaper
 
+Some of the stack require this setting.
+
 ## Deploy VPC
 
 Deploying the following template sets up a private network with private and public subnets, with the required routing tables, internet gateways, NAT settings and a set of security groups intended to be used for generic purposes.
@@ -268,7 +269,6 @@ Use the following parameters:
 - Stack name: `api` (can be whatever)
 - BackendApiHostname: `api` (use anything you want, this will be the domain name of the api gateway under your subdomain)
 - DeploymentId: `dev` (see the Deployment ID section above)
-- DeploymentType: `DEV` (or `PROD`, see the Deployment Type section above)
 - FullDomainName: the domain created in the new AWS account (`dev.example.com`)
 GenericCertificateArn: the ARN of the certificate created above
 
@@ -289,7 +289,6 @@ Go to `AWS Console > CloudFormation` and select `Create stack`. Select that the 
 Use the following parameters:
 - Stack name: `miscellaneous` (can be whatever)
 - DeploymentId: `dev` (see the Deployment ID section above)
-- DeploymentType: `DEV` (or `PROD`, see the Deployment Type section above)
 - EmailNotificationList: provide an email address, or a comma-separated list, where CloudWatch alarms are sent (these alarms are not sent to the alerts SNS, as those are not delivered if there's no lambda to distribute them.)
 
 It's OK to use the default stack option configuration.
@@ -307,3 +306,59 @@ Go to `AWS Secrets Manager > Secrets` and select the one of the name starting wi
 Get an access token from GitHub: `GitHub > Settings > Developer Settings > Personal Access Tokens > Tokens (classic)`, and generate one with enabled all `repo` and `admin:repo_hook` permissions. Copy the token value to the secret as the value of the key `token`.
 
 If you're planning to use 3rd party services, like Slack for delivering alerts, then you can put them into the secret with the name starting with `Secret-`.
+
+The ARN of this secret is shared with each backend service as an environmental variable called `SERVICE_SECRET_ARN`.
+
+## Deploy Databases
+
+This template deploys a PostgreSQL database. It can be either an RDS or a high performance Aurora.
+
+Go to `AWS Console > CloudFormation` and select `Create stack`. Select that the template is ready, and choose `Upload a template file`. Select `db-template.yml` from this repo.
+
+Use the following parameters:
+- Stack name: can be whatever, something that explains that this is a db and its purpose too
+- AlertsSnsTopicRef: optional: by default system notifications go to the SNS topic defined in the miscellaneous stack. You can specify a different one.
+- AllocatedStorageSize: size of the DB in GB
+- CreateReplica: specifying 'Yes' will create a read-only replica if the db is RDS (see DBType below).
+- DBType: `rds` or `aurora`. Aurora is more robust, and has features for higher availability.
+- DatabaseId: the name specified here will be used in backend services for accessing this db. Recommended to use a name that clearly identifies the db's purpose.
+- DeploymentId: `dev` (see the Deployment ID section above)
+- Family: typcally `postgres15` or `aurora-postgresql15`, has to be aligned with the DBType setting
+- InstanceClass: the minimum is `db.t3.micro` for RDS and `db.t3.medium` for Aurora
+- LocalIncomingConnectionSecurityGroupId: optional: only to be specified if you'd override the accessibility from the default security group that enables backend services to connect to the DB
+- PostgresEngineVersion: feel free to use whatever exist and supported
+- PrimaryPrivateSubnetRef: optional: only to be specified if you'd override which VPC/subnet you want to deploy to
+- SecondaryPrivateSubnetRef: optional: only to be specified if you'd override which VPC/subnet you want to deploy to
+- SnapshotId: optional: to be specified if you already have a db snapshot that you want to use as the initial db content
+- VPCRef: optional: only to be specified if you'd override which VPC/subnet you want to deploy to
+
+Time to deploy depends a lot on the db type, it it's created from a snapshot and if there are replicas. Expected to take 15-60 minutes.
+
+### Accessing DBs from backends
+
+Databases have their master credentials auto-generated. Each database has its own secret that stores their master credentials.
+
+The names of the secrets storing the application load balancers' host names are the following respectively:
+`{DeploymentID}/db/{DatabaseID}/secretName`, where:
+- DeploymentID is the the ID of this deployment in question
+- DatabaseID is the ID of the database stack.
+
+
+## Deploy backend services as a container
+
+
+
+
+### Accessing ECS backends from Lambdas
+
+Backend services deployed to AWS ECS Fargate have application load-balancers. These load balancers' host names are stored in the AWS SSM parameter store so that lambdas (or other services) can look them up easily.
+
+The names of the parameters storing the application load balancers' host names are the following respectively:
+`{DeploymentID}/ecs/{PipelineID}/albDnsName`, where:
+- DeploymentID is the the ID of this deployment in question
+- PipelineID is the ID of the CICD stack that deploys to ECS Fargate.
+
+
+## Deploy backend services as serverless
+
+## Deploy frontends
