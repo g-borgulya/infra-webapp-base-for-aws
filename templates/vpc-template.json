@@ -192,10 +192,6 @@
    "Description": "deployment_id",
    "Type": "String"
   },
-  "DeploymentType": {
-   "Description": "[ DEV | PROD ]",
-   "Type": "String"
-  },
   "PrimaryPrivateCidr": {
    "Description": "PrimaryPrivateCidr",
    "Type": "String"

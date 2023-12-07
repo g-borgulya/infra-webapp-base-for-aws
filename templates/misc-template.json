@@ -63,10 +63,6 @@
    "Description": "deployment_id",
    "Type": "String"
   },
-  "DeploymentType": {
-   "Description": "[ DEV | PROD ]",
-   "Type": "String"
-  },
   "EmailNotificationList": {
    "Description": "The Email notification list is used to configure a SNS topic for sending cloudwatch alarm and SQS Event notifications",
    "Type": "String"

@@ -92,19 +92,15 @@
  },
  "Parameters": {
   "BackendApiHostname": {
-   "Description": "api from api.dev.example.com",
+   "Description": "api from api.dev.wafflecode.app",
    "Type": "String"
   },
   "DeploymentId": {
    "Description": "deployment_id",
    "Type": "String"
   },
-  "DeploymentType": {
-   "Description": "[ DEV | PROD ]",
-   "Type": "String"
-  },
   "FullDomainName": {
-   "Description": "like dev.example.com",
+   "Description": "like dev.wafflecode.app",
    "Type": "String"
   },
   "GenericCertificateArn": {

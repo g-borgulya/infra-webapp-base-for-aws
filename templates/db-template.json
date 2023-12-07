@@ -28,18 +28,6 @@
     }
    ]
   },
-  "CUSTOM_DEPLOYMENT_SECRET_ARN": {
-   "Fn::Not": [
-    {
-     "Fn::Equals": [
-      {
-       "Ref": "DeploymentSecretArn"
-      },
-      ""
-     ]
-    }
-   ]
-  },
   "CUSTOM_LOCAL_INCOMMING_CONNECTIONS_SG": {
    "Fn::Not": [
     {
@@ -175,11 +163,6 @@
    "Description": "deployment_id",
    "Type": "String"
   },
-  "DeploymentSecretArn": {
-   "Default": "",
-   "Description": "The arn of the deployment_secret",
-   "Type": "String"
-  },
   "DeploymentType": {
    "Description": "[ DEV | PROD ]",
    "Type": "String"
@@ -196,7 +179,7 @@
   },
   "LocalIncomingConnectionSecurityGroupId": {
    "Default": "",
-   "Description": "Local inbound enabled SG",
+   "Description": "Local inbound enabled SG (optional)",
    "Type": "String"
   },
   "PostgresEngineVersion": {
@@ -206,12 +189,12 @@
   },
   "PrimaryPrivateSubnetRef": {
    "Default": "",
-   "Description": "The primary private subnet in the VPC",
+   "Description": "The primary private subnet in the VPC (optional)",
    "Type": "String"
   },
   "SecondaryPrivateSubnetRef": {
    "Default": "",
-   "Description": "The secondary private subnet in the VPC",
+   "Description": "The secondary private subnet in the VPC (optional)",
    "Type": "String"
   },
   "SnaphotId": {
@@ -221,7 +204,7 @@
   },
   "VPCRef": {
    "Default": "",
-   "Description": "The VPC",
+   "Description": "The VPC (optional)",
    "Type": "String"
   }
  },

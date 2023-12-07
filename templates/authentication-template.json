@@ -159,10 +159,6 @@
   "DeploymentId": {
    "Description": "deployment_id",
    "Type": "String"
-  },
-  "DeploymentType": {
-   "Description": "[ DEV | PROD ]",
-   "Type": "String"
   }
  },
  "Resources": {
