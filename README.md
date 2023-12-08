@@ -2,7 +2,6 @@
 
 Steps:
 - Create an AWS account
-- Enable Cloud Trail for logging operations
 - Create DNS settings
 - Create generic a HTTPS certificate
 - Deploy VPC
@@ -151,7 +150,6 @@ Go to `AWS Console > CloudFormation` and select `Create stack`. Select that the 
 
 Use the following parameters:
 - Stack name: can be whatever, something that explains that this is a db and its purpose too
-- AlertsSnsTopicRef: optional: by default system notifications go to the SNS topic defined in the miscellaneous stack. You can specify a different one.
 - AllocatedStorageSize: size of the DB in GB
 - CreateReplica: specifying 'Yes' will create a read-only replica if the db is RDS (see DBType below).
 - DBType: `rds` or `aurora`. Aurora is more robust, and has features for higher availability.
@@ -159,12 +157,10 @@ Use the following parameters:
 - DeploymentId: `dev` (see the Deployment ID section above)
 - Family: typcally `postgres15` or `aurora-postgresql15`, has to be aligned with the DBType setting
 - InstanceClass: the minimum is `db.t3.micro` for RDS and `db.t3.medium` for Aurora
-- LocalIncomingConnectionSecurityGroupId: optional: only to be specified if you'd override the accessibility from the default security group that enables backend services to connect to the DB
 - PostgresEngineVersion: feel free to use whatever exist and supported
-- PrimaryPrivateSubnetRef: optional: only to be specified if you'd override which VPC/subnet you want to deploy to
-- SecondaryPrivateSubnetRef: optional: only to be specified if you'd override which VPC/subnet you want to deploy to
 - SnapshotId: optional: to be specified if you already have a db snapshot that you want to use as the initial db content
-- VPCRef: optional: only to be specified if you'd override which VPC/subnet you want to deploy to
+
+The optional parameters can be used to override values coming from the existing stacks.
 
 Time to deploy depends a lot on the db type, it it's created from a snapshot and if there are replicas. Expected to take 15-60 minutes.
 
@@ -252,3 +248,5 @@ The names of the parameters storing the application load balancers' host names a
 - PipelineID is the ID of the CICD stack that deploys to ECS Fargate.
 
 ## Deploy frontends
+
+TBC
