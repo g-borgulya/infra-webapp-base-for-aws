@@ -382,7 +382,7 @@
   },
   "VPCRef": {
    "Default": "",
-   "Description": "The VPC",
+   "Description": "(optional) The VPC",
    "Type": "String"
   }
  },
@@ -888,7 +888,7 @@
           "apigateway:*"
          ],
          "Effect": "Allow",
-         "Resource": "arn:aws:apigateway:us-east-2::*"
+         "Resource": "*"
         },
         {
          "Action": [
@@ -898,7 +898,7 @@
           "cloudformation:DeleteStack"
          ],
          "Effect": "Allow",
-         "Resource": "arn:aws:cloudformation:us-east-2:aws:transform/*"
+         "Resource": "*"
         }
        ],
        "Version": "2012-10-17"

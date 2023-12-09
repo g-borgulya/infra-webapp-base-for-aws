@@ -1331,6 +1331,255 @@
    "Type": "AWS::Logs::LogGroup",
    "UpdateReplacePolicy": "Retain"
   },
+  "NLBApiGatewayMethod": {
+   "Properties": {
+    "ApiKeyRequired": true,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "ANY",
+    "Integration": {
+     "ConnectionId": {
+      "Ref": "NlbVpcLink"
+     },
+     "ConnectionType": "VPC_LINK",
+     "IntegrationHttpMethod": "ANY",
+     "Type": "HTTP",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "http://",
+        {
+         "Fn::GetAtt": [
+          "NetworkLoadBalancer",
+          "DNSName"
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "NLBApiGatewayResource"
+    },
+    "RestApiId": {
+     "Fn::If": [
+      "CUSTOM_RESAPI_ID",
+      {
+       "Ref": "RestApiId"
+      },
+      {
+       "Fn::ImportValue": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Ref": "DeploymentId"
+          },
+          "-RestApiId"
+         ]
+        ]
+       }
+      }
+     ]
+    }
+   },
+   "Type": "AWS::ApiGateway::Method"
+  },
+  "NLBApiGatewayResource": {
+   "Properties": {
+    "ParentId": {
+     "Fn::If": [
+      "CUSTOM_ROOT_RESOURCE_ID",
+      {
+       "Ref": "RootResourceId"
+      },
+      {
+       "Fn::ImportValue": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Ref": "DeploymentId"
+          },
+          "-RootResourceId"
+         ]
+        ]
+       }
+      }
+     ]
+    },
+    "PathPart": {
+     "Ref": "PipelineId"
+    },
+    "RestApiId": {
+     "Fn::If": [
+      "CUSTOM_RESAPI_ID",
+      {
+       "Ref": "RestApiId"
+      },
+      {
+       "Fn::ImportValue": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Ref": "DeploymentId"
+          },
+          "-RestApiId"
+         ]
+        ]
+       }
+      }
+     ]
+    }
+   },
+   "Type": "AWS::ApiGateway::Resource"
+  },
+  "NLBListener": {
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "NLBTargetGroup"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "NetworkLoadBalancer"
+    },
+    "Port": 80,
+    "Protocol": "TCP"
+   },
+   "Type": "AWS::ElasticLoadBalancingV2::Listener"
+  },
+  "NLBTargetGroup": {
+   "Properties": {
+    "HealthCheckIntervalSeconds": "80",
+    "HealthCheckPath": "/health_check",
+    "HealthCheckProtocol": "HTTP",
+    "HealthCheckTimeoutSeconds": "50",
+    "HealthyThresholdCount": "2",
+    "Matcher": {
+     "HttpCode": "200-299"
+    },
+    "Port": 80,
+    "Protocol": "TCP",
+    "TargetType": "alb",
+    "Targets": [
+     {
+      "Id": {
+       "Ref": "ApplicationLoadBalancer"
+      },
+      "Port": 80
+     }
+    ],
+    "UnhealthyThresholdCount": "5",
+    "VpcId": {
+     "Fn::If": [
+      "CUSTOM_VPC_REF",
+      {
+       "Ref": "VPCRef"
+      },
+      {
+       "Fn::ImportValue": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Ref": "DeploymentId"
+          },
+          "-VPCRef"
+         ]
+        ]
+       }
+      }
+     ]
+    }
+   },
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup"
+  },
+  "NetworkLoadBalancer": {
+   "Properties": {
+    "Scheme": "internal",
+    "SecurityGroups": [
+     {
+      "Ref": "ALBSecurityGroup"
+     }
+    ],
+    "Subnets": [
+     {
+      "Fn::If": [
+       "CUSTOM_PRIMARY_PRIVATE_SUBNET_REF",
+       {
+        "Ref": "PrimaryPrivateSubnetRef"
+       },
+       {
+        "Fn::ImportValue": {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Ref": "DeploymentId"
+           },
+           "-PrimaryPrivateSubnetRef"
+          ]
+         ]
+        }
+       }
+      ]
+     },
+     {
+      "Fn::If": [
+       "CUSTOM_SECONDARY_PRIVATE_SUBNET_REF",
+       {
+        "Ref": "SecondaryPrivateSubnetRef"
+       },
+       {
+        "Fn::ImportValue": {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Ref": "DeploymentId"
+           },
+           "-SecondaryPrivateSubnetRef"
+          ]
+         ]
+        }
+       }
+      ]
+     }
+    ],
+    "Type": "network"
+   },
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer"
+  },
+  "NlbVpcLink": {
+   "Properties": {
+    "Name": {
+     "Fn::Join": [
+      "",
+      [
+       {
+        "Ref": "DeploymentId"
+       },
+       "-",
+       {
+        "Ref": "PipelineId"
+       },
+       "-NlbVpcLink"
+      ]
+     ]
+    },
+    "TargetArns": [
+     {
+      "Ref": "NetworkLoadBalancer"
+     }
+    ]
+   },
+   "Type": "AWS::ApiGateway::VpcLink"
+  },
   "Pipeline": {
    "DependsOn": [
     "Project"
