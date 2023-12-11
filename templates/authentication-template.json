@@ -254,18 +254,11 @@
       "Required": false
      },
      {
-      "AttributeDataType": "String",
-      "DeveloperOnlyAttribute": true,
-      "Mutable": true,
-      "Name": "organization",
-      "Required": false
-     },
-     {
-      "AttributeDataType": "String",
-      "DeveloperOnlyAttribute": true,
-      "Mutable": true,
-      "Name": "projects",
-      "Required": false
+       "AttributeDataType": "String",
+       "DeveloperOnlyAttribute": true,
+       "Mutable": true,
+       "Name": "customer",
+       "Required": false
      }
     ],
     "SmsAuthenticationMessage": {
