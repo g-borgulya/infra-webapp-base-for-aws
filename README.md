@@ -103,7 +103,7 @@ Use the following parameters:
 - BackendApiHostname: `api` (use anything you want, this will be the domain name of the api gateway under your subdomain)
 - DeploymentId: `dev` (see the Deployment ID section above)
 - FullDomainName: the domain created in the new AWS account (`dev.example.com`)
-GenericCertificateArn: the ARN of the certificate created above
+- GenericCertificateArn: the ARN of the certificate created above
 
 It's OK to use the default stack option configuration.
 Before submission, acknowledge that the templates are going to create IAM roles.
@@ -249,4 +249,28 @@ The names of the parameters storing the application load balancers' host names a
 
 ## Deploy frontends
 
-TBC
+This template deploys a CICD pipeline that can deploy static files into an AWS S3 bucket. It also sets up an AWS CloudFront distribution for serving websites that uses the S3 bucket as its file storage.
+
+Go to `AWS Console > CloudFormation` and select `Create stack`. Select that the template is ready, and choose `Upload a template file`. Select `cdn-template.yml` from this repo.
+
+Use the following parameters:
+- Stack name: can be whatever. Recommended to have something that explains that this is a cicd deploying cloudformation and its purpose too (for example: `cicd-cdn-client-ui`)
+- BuildspecPath: The path to the `buildspec.yml` file. (like `client-ui/buildspec.yml`)
+- CICDManualApproval: if deploying to production, select True, else False
+- DeploymentId: `dev`, `staging` or `prod`
+- DeploymentType: `DEV` or `PROD`
+- FullDomainName: the domain created in the new AWS account (`dev.example.com`)
+- GenericCertificateArn: the ARN of the certificate created above
+- GithubBranch: the branch of the github repo to be deployed
+- GithubOwner: the user or organization that the repository belongs to
+- GithubRepoName: the name of the repository
+- PipelineId: can be whatever. Recommended to use a name that can be used from code to access this service (for example? `client-ui`)
+- WebHostname: `www` by default (for `www.dev.example.com`), but can be whatever
+
+The optional parameters can be used to override values coming from the existing stacks.
+
+It's OK to use the default stack option configuration.
+Before submission, acknowledge that the templates are going to create IAM roles.
+
+The time required to deploy the cicd and related infrastrucre, is expected to take 5-ish minutes. To run the CICD and wait for the CDN distribution, depends on the buildtime of the frontend.
+
