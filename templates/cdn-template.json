@@ -1268,6 +1268,20 @@
      "Image": "aws/codebuild/standard:7.0",
      "Type": "LINUX_CONTAINER"
     },
+    "Name": {
+     "Fn::Join": [
+      "",
+      [
+       {
+        "Ref": "DeploymentId"
+       },
+       "-",
+       {
+        "Ref": "PipelineId"
+       }
+      ]
+     ]
+    },
     "ServiceRole": {
      "Fn::GetAtt": [
       "CodeBuildServiceRole",
