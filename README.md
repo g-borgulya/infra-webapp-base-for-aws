@@ -14,11 +14,11 @@ Steps:
 - Deploy backend services as a containers
 - Deploy frontends
 
-## Create an AWS account
+## Creating an AWS account
 
 For setting up your AWS account, refer to the [specific doc](setting_up_aws.md).
 
-## Create DNS Settings
+## Creating DNS Settings
 
 Assuming that the root AWS account has the top level domain registered, let's say `example.com`. Then the idea is to have these templates deploy everything under a subdomain of it, like `dev.example.com`.
 
@@ -26,7 +26,7 @@ For this, in the newly created account, go to Route 53, and create a new hosted 
 
 This new hosted zone will only be known and used by the public, when it's connected to the root DNS account. There will be an NS type record automatically created for the subdomain (`dev.example.com`). Then go to the AWS root account, Route 53, and select the hosted zone of the root DNS (`example.com`). Select `Create record`. For the subdomain use the new subdomain (`dev`), the record type has to be `NS`. 
 
-## Create generic a HTTPS certificate
+## Creating generic a HTTPS certificate
 
 We'll need a certificate that can be used for serving any backends or frontends using HTTPS.
 
@@ -52,7 +52,7 @@ Two different types of deployments are supported:
 
 Some of the stack require this setting.
 
-## Deploy VPC
+## Deploying a VPC
 
 Deploying the following template sets up a private network with private and public subnets, with the required routing tables, internet gateways, NAT settings and a set of security groups intended to be used for generic purposes.
 
@@ -73,7 +73,7 @@ Before submission, acknowledge that the templates are going to create IAM roles.
 
 Expected to take 3-4 minutes to deploy.
 
-## Deploy Authentication
+## Deploying Authentication
 
 Deploying the related template sets up AWS Cognito.
 
@@ -92,7 +92,7 @@ Before submission, acknowledge that the templates are going to create IAM roles.
 
 Expected to take 2-3 minutes to deploy.
 
-## Deploy the API Gateway
+## Deploying the API Gateway
 
 Deploying the next template sets up an API Gateway. The idea is that backend services with public endpoints register resources on this API Gateway. The gateway uses IAM based authentication, assuming that the connecting frontends are using AWS Cognito from the above template.
 
@@ -110,7 +110,7 @@ Before submission, acknowledge that the templates are going to create IAM roles.
 
 Expected to take 3-4 minutes to deploy.
 
-## Deploy Miscellaneous tools
+## Deploying Miscellaneous tools
 
 This template adds the following things:
 - An AWS SNS topic that can be used from any backend services to send system-level alerts and notifications. The SNS messages are not delivered anywhere by these templates, but the idea is that a simple lambda function can take them and send them over to email, Slack or whatever.
@@ -130,7 +130,7 @@ Expected to take up to 1 minute to deploy.
 
 Wohoo, at this point we're ready to deploy the actual app!
 
-## Setup secrets
+## Setting up secrets
 
 In order to be able to deploy things from GitHub, credentials for GitHub has to be provided.
 
@@ -142,7 +142,7 @@ If you're planning to use 3rd party services, like Slack for delivering alerts, 
 
 The ARN of this secret is shared with each backend service as an environmental variable called `SERVICE_SECRET_ARN`.
 
-## Deploy Databases
+## Deploying Databases
 
 This template deploys a PostgreSQL database. It can be either an RDS or a high performance Aurora.
 
@@ -173,7 +173,7 @@ The names of the secrets storing the application load balancers' host names are 
 - DeploymentID is the the ID of this deployment in question
 - DatabaseID is the ID of the database stack.
 
-## Deploy backend services as serverless
+## Deploying backend services as serverless
 
 This template deploys a CICD pipeline that can deploy a complete CloudFormation stack. The primary purpose is to have lambda function(s) defined in the stack template so that the CICD can deploy into AWS Lambda. But if needed other AWS resources can be added too, like CloudWatch Alarms, DBs, Queues, etc. More on the requirements on the deployed repo below.
 
@@ -213,7 +213,7 @@ When the CICD processes the initial repo or a change in the repo successfully, t
 
 A deployment can take a longer time, depending on the build complexity and the number and types of AWS resources to be deployed or updated.
 
-## Deploy backend services as a container
+## Deploying backend services as a container
 
 This template deploys a CICD pipeline that can deploy a docker container. After the CICD builds the contaner image, it is stored in the `AWS ECR` container repository. And new containers are deployed by `AWS CodeDeploy` as `AWS ECS Fargate` Clusters > Services > Tasks.
 
@@ -247,7 +247,7 @@ The names of the parameters storing the application load balancers' host names a
 - DeploymentID is the the ID of this deployment in question
 - PipelineID is the ID of the CICD stack that deploys to ECS Fargate.
 
-## Deploy frontends
+## Deploying frontends
 
 This template deploys a CICD pipeline that can deploy static files into an AWS S3 bucket. It also sets up an AWS CloudFront distribution for serving websites that uses the S3 bucket as its file storage.
 
@@ -273,4 +273,3 @@ It's OK to use the default stack option configuration.
 Before submission, acknowledge that the templates are going to create IAM roles.
 
 The time required to deploy the cicd and related infrastrucre, is expected to take 5-ish minutes. To run the CICD and wait for the CDN distribution, depends on the buildtime of the frontend.
-
