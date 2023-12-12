@@ -219,13 +219,7 @@
       }
      }
     },
-    "AutoVerifiedAttributes": [
-     "phone_number"
-    ],
-    "EnabledMfas": [
-     "SMS_MFA"
-    ],
-    "MfaConfiguration": "ON",
+    "MfaConfiguration": "OFF",
     "Policies": {
      "PasswordPolicy": {
       "MinimumLength": 12,
@@ -252,6 +246,20 @@
       "Mutable": true,
       "Name": "role",
       "Required": false
+     },
+     {
+       "AttributeDataType": "String",
+       "DeveloperOnlyAttribute": true,
+       "Mutable": true,
+       "Name": "organization",
+       "Required": false
+     },
+     {
+       "AttributeDataType": "String",
+       "DeveloperOnlyAttribute": true,
+       "Mutable": true,
+       "Name": "projects",
+       "Required": false
      },
      {
        "AttributeDataType": "String",

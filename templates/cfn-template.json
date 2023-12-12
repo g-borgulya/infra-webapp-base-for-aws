@@ -956,9 +956,7 @@
           "secretsmanager:UpdateSecret"
          ],
          "Effect": "Allow",
-         "Resource": {
-          "Ref": "Secret"
-         }
+         "Resource": "*"
         },
         {
          "Action": [
@@ -974,6 +972,7 @@
           "s3:*",
           "sqs:*",
           "sns:*",
+          "ssm:*",
           "lambda:*",
           "dynamodb:*"
          ],
