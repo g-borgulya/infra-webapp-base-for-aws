@@ -267,7 +267,7 @@
   },
   "CommitID": {
    "Default": "",
-   "Description": "(optional) GitHub commit ID of that has to be built",
+   "Description": "(optional) GitHub commit ID of that has to be built.  If unspecified it always automatically builds the latest.",
    "Type": "String"
   },
   "DeploymentId": {
@@ -1905,6 +1905,30 @@
        }
       },
       {
+       "Name": "ALERTS_TOPIC_ARN",
+       "Value": {
+        "Fn::If": [
+         "CUSTOM_ALERT_SNS_REF",
+         {
+          "Ref": "AlertsSnsTopicRef"
+         },
+         {
+          "Fn::ImportValue": {
+           "Fn::Join": [
+            "",
+            [
+             {
+              "Ref": "DeploymentId"
+             },
+             "-AlertsSnsTopicRef"
+            ]
+           ]
+          }
+         }
+        ]
+       }
+      },
+      {
        "Name": "SERVICE_SECRET_ARN",
        "Value": {
         "Ref": "Secret"
@@ -2220,6 +2244,12 @@
      {
       "Environment": [
        {
+        "Name": "AWS_REGION",
+        "Value": {
+         "Ref": "AWS::Region"
+        }
+       },
+       {
         "Name": "DEPLOYMENT_SECRET_ARN",
         "Value": {
          "Fn::If": [
@@ -2244,6 +2274,30 @@
         }
        },
        {
+        "Name": "ALERTS_TOPIC_ARN",
+        "Value": {
+         "Fn::If": [
+          "CUSTOM_ALERT_SNS_REF",
+          {
+           "Ref": "AlertsSnsTopicRef"
+          },
+          {
+           "Fn::ImportValue": {
+            "Fn::Join": [
+             "",
+             [
+              {
+               "Ref": "DeploymentId"
+              },
+              "-AlertsSnsTopicRef"
+             ]
+            ]
+           }
+          }
+         ]
+        }
+       },
+       {
         "Name": "SERVICE_SECRET_ARN",
         "Value": {
          "Ref": "Secret"
@@ -2251,7 +2305,9 @@
        },
        {
         "Name": "RUNTIME_JSON",
-        "Value": "{}"
+        "Value": {
+         "Ref": "RuntimeJson"
+        }
        },
        {
         "Name": "DEPLOYMENT_ID",
@@ -2396,9 +2452,14 @@
           "secretsmanager:List*"
          ],
          "Effect": "Allow",
-         "Resource": {
-          "Ref": "Secret"
-         }
+         "Resource": "*"
+        },
+        {
+         "Action": [
+          "ssm:Get*"
+         ],
+         "Effect": "Allow",
+         "Resource": "*"
         },
         {
          "Action": [
