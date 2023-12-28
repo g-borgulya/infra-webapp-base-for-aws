@@ -288,6 +288,16 @@
    "Description": "(optional) Local inbound enabled SG",
    "Type": "String"
   },
+  "EcsTaskCPU": {
+   "Default": "256",
+   "Description": "(optional) CPU capacity (for example 256 or 1024)",
+   "Type": "String"
+  },
+  "EcsTaskRAM": {
+   "Default": "512",
+   "Description": "(optional) RAM capacity (for example 512 or 3072)",
+   "Type": "String"
+  },
   "GithubBranch": {
    "Default": "main",
    "Description": "GitHub branch name to be deployed",
@@ -2388,7 +2398,9 @@
       ]
      }
     ],
-    "Cpu": "1024",
+    "Cpu": {
+     "Ref": "EcsTaskCPU"
+    },
     "ExecutionRoleArn": {
      "Fn::GetAtt": [
       "ExecutionRole",
@@ -2409,7 +2421,9 @@
       ]
      ]
     },
-    "Memory": "3072",
+    "Memory": {
+     "Ref": "EcsTaskRAM"
+    },
     "NetworkMode": "awsvpc",
     "RequiresCompatibilities": [
      "FARGATE"
