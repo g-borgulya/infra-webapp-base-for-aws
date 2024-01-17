@@ -109,31 +109,11 @@
   }
  },
  "Resources": {
-  "AlbDnsNameParameter": {
-   "Properties": {
-    "Description": "The hostname of the api gateway",
-    "Name": {
-     "Fn::Join": [
-      "",
-      [
-       "/",
-       {
-        "Ref": "DeploymentId"
-       },
-       "/api/",
-       "hostName"
-      ]
-     ]
-    },
-    "Type": "String",
-    "Value": {
-     "Ref": "ApiDomainName"
-    }
-   },
-   "Type": "AWS::SSM::Parameter"
-  },
   "Api": {
    "Properties": {
+    "BinaryMediaTypes": [
+     "multipart/form-data"
+    ],
     "Description": "API gateway for the backend services",
     "EndpointConfiguration": {
      "Types": [
@@ -238,6 +218,29 @@
     }
    },
    "Type": "AWS::ApiGateway::DomainName"
+  },
+  "ApiGwDomainName": {
+   "Properties": {
+    "Description": "The hostname of the api gateway",
+    "Name": {
+     "Fn::Join": [
+      "",
+      [
+       "/",
+       {
+        "Ref": "DeploymentId"
+       },
+       "/api/",
+       "hostName"
+      ]
+     ]
+    },
+    "Type": "String",
+    "Value": {
+     "Ref": "ApiDomainName"
+    }
+   },
+   "Type": "AWS::SSM::Parameter"
   },
   "ApigatewayUsagePlan": {
    "DependsOn": "DeploymentProd",
